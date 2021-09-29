@@ -1,6 +1,5 @@
 package highScore;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class HighScoreTest {
@@ -16,47 +15,42 @@ public class HighScoreTest {
 		int[] intArr; // 저장된 문자열을 숫자로 저장하는 배열
 		int mV = 0; // 순서 변수
 		
-		str = sc.next();
-		strArr = str.split(",");
-//		intArr = Arrays.stream(strArr).mapToInt(Integer::parseInt).toArray(); 
-		intArr = new int[strArr.length];
-		System.out.println(strArr.length);
-		
-		for( int i=0; i<strArr.length; i++) {
-			intArr[i] = Integer.parseInt(strArr[i]);
-			System.out.print(intArr[i]);
-		}
-		
-		System.out.println("===========");
+		System.out.println("======= 입 력 =======");
 		x = sc.nextInt();
 		y = sc.nextInt();
+		str = sc.next();
+		strArr = str.split(",");
+
+		int val = x*y; // 9
+//		intArr = Arrays.stream(strArr).mapToInt(Integer::parseInt).toArray(); 
+//		intArr = new int[strArr.length];
+		intArr = new int[val];
+//		System.out.println(strArr.length); // 4
+//		System.out.println(intArr.length); // 9
 		
-		arr = new int[x][y];		
-		
-		if(strArr.length != (x*y)) {
-			System.out.println("문자열길이가 안맞아요");
-		}else {
-			for( int i = 0; i<x ; i++) {
-				for(int j = 0; j<y; j++) {
-					// 둘이 길이가 맞아야함. 예외처리좀 ㅠ
-					arr[i][j] = intArr[mV];
-					mV++;
-				}
+		System.out.println("====================");
+		for( int i = 0; i < intArr.length ; i++ ) {
+			if( i < strArr.length ) {
+				intArr[i] = Integer.parseInt(strArr[i]);
+			}else {
+				intArr[i] = 0;
 			}
-			
-			for(int i = 0; i<arr.length; i ++) {
-				System.out.println(Arrays.toString(arr[i]));
-			}
+//			System.out.print(intArr[i]);
 		}
 		
-//		for(int i = 2; i<10; i++) {
-//			for( int j = 1; j < 10 ; j++) {
-//				arr[i-2][j-1] = i*j;
-//			}
-//		}
-//		
-//		
+		arr = new int[x][y];
 		
+//		if(strArr.length > (x*y)) {
+//		ValidTest vt = new ValidTest(val, strArr, intArr, arr);
+		
+		for( int i = 0; i<x ; i++) {
+			for(int j = 0; j<y; j++) {
+				arr[i][j] = intArr[mV];
+				mV++;
+				System.out.print(arr[i][j] + " ");
+			}
+			System.out.println();
+		}
 		
 		sc.close();
 		
