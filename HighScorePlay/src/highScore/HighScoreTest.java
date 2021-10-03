@@ -1,9 +1,9 @@
 package highScore;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class HighScoreTest {
-
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
@@ -23,10 +23,7 @@ public class HighScoreTest {
 
 		int val = x*y; // 9
 //		intArr = Arrays.stream(strArr).mapToInt(Integer::parseInt).toArray(); 
-//		intArr = new int[strArr.length];
 		intArr = new int[val];
-//		System.out.println(strArr.length); // 4
-//		System.out.println(intArr.length); // 9
 		
 		System.out.println("====================");
 		for( int i = 0; i < intArr.length ; i++ ) {
@@ -40,7 +37,6 @@ public class HighScoreTest {
 		
 		arr = new int[x][y];
 		
-//		if(strArr.length > (x*y)) {
 //		ValidTest vt = new ValidTest(val, strArr, intArr, arr);
 		
 		for( int i = 0; i<x ; i++) {
