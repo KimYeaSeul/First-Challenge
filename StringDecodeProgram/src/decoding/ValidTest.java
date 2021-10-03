@@ -1,56 +1,74 @@
 package decoding;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class ValidTest {
 
-	// 다 구현하고  static써보기.! 왜써야하는지 생각해보고
-	
 	String encodeVal;
-	private boolean isValid = true;
 	String[] arr;
-	int numOfBracket=0;
 	String[] bracket;
 	int[] bracketIndex;
+	int numOfBracket=0;
+
+	String errVal="";
 	
-	public ValidTest() { } // 기본생성자 만든 이유는?
+	public ValidTest() { } 
 	
 	public ValidTest(String encodeVal){
-		splitString(encodeVal);
-		stringTest(encodeVal);
-		dataTest(encodeVal);
-		lengthTest(encodeVal);		
-		arrOfBracket();
+		splitString(encodeVal); // encodeVal을 문자열 배열로 나누어 반환
+		lengthTest(encodeVal); // 문자열 유효성 검사 시작 : 길이 -> 문자열 규칙	
+		arrOfBracket(); // 괄호 배열 및 괄호인덱스 값 배열 생성
 	}
 	
 	public String[] splitString(String str) {
 		arr = str.split("");
 		return arr;
 	}
-	
-	public void stringTest(String str) {
-		for(String array : arr) {
-			if(Pattern.matches("^[0-9]*$", array)) {
-				// 숫자가 양의 정수인지 확인하는 함수
-//				System.out.println(array+ " 는 숫자입니다.");
-				isValid = true;
-			}else if(Pattern.matches("^[a-zA-Z]*$", array)){
-//				System.out.println(array+ " 는 영어입니다.(대소문자)");
-				isValid = true;				
-			}else if(Pattern.matches("[\\[\\]]", array)) {
-				// [ 일때 앞에는 무조건 숫자, 뒤에는 무조건 문자가 와야됨
-				// ] 일때 앞에는 무조건 문자, 뒤에는 문자, 숫자, ]
-//				System.out.println(array+ " 는 괄호입니다....");
-				numOfBracket++;
-				isValid = true;
-			}else{
-				isValid = false;
-				System.out.println(array + "은 올바르지 않은 문자입니다.");
+
+	public void lengthTest(String str) {
+		if(str.length() > 0 && str.length() < 128 ) { // 문자열 길이가 맞는지 확인
+			if( !stringTest(str)) { // 문자열이 규칙과 맞는지 확인
+				errorV(errVal);	
 			}
+		} else if(str.length() <= 0 ){
+			errorV(" 문자열을 입력하세요.");			
+		}
+		else if(str.length() >= 128 ){
+			errorV(" 문자열을 128자 이내로 입력하세요.");			
 		}
 	}
 	
+	public boolean stringTest(String str) {
+		
+		if(arr[0].equals("[") || arr[0].equals("]")) {
+			errVal += "문자열 맨 앞에 괄호가 올 수 없습니다.";
+		}else if(((!str.matches(".*[\\[\\]].*"))) && (str.matches("^.*[0-9].*$"))) {
+			errVal += "문자열에 괄호가 없는데 숫자가 있을 수 없습니다.";
+		}else if((!str.matches("^.*[a-z].*$"))) {
+			errVal += "문자열에 문자를 넣어주세요.";
+		}else if(str.matches(".*[\\-].*")){
+			errVal += "음수는 올 수 없습니다.";
+		}else {
+			for(int i=0; i<arr.length; i++) {
+				if(Pattern.matches("[\\[]", arr[i])) {
+					// [ 일때 앞에는 무조건 숫자, 뒤에는 무조건 문자가 와야됨
+					if(!Pattern.matches("^[0-9]*$", arr[i-1]) || !Pattern.matches("^[a-z]*$", arr[i+1])) {
+						errVal += arr[i-1] + arr[i] + arr[i+1]+"는 올바르지 않습니다.";
+					}else {
+						numOfBracket++;
+					}
+				}else if(Pattern.matches("[\\]]", arr[i])) {
+					numOfBracket++;
+				}
+			}
+		}
+		
+		if(!errVal.isEmpty()) {
+			return false;
+		}else return true;
+	}
+
+	// TODO : 괄호 갯수가 맞지 않을 때 예외처리 필요 ex) [[[] , [[] ...
 	public void arrOfBracket(){
 		bracket = new String[numOfBracket];
 		bracketIndex = new int[numOfBracket];
@@ -65,43 +83,11 @@ public class ValidTest {
 				}
 			}
 		}
-		System.out.println("bracket " + Arrays.toString(bracket));
-		System.out.println("bracketindex " +Arrays.toString(bracketIndex));
 	}
 	
-	public void dataTest(String str) {
-		// 숫자는 양의 정수이며, 문자에는 숫자가 포함되지 않습니다.
-		
-		System.out.println("dataTest");
-		if(isValid) isValid = true;		
-	}
-	
-	public void lengthTest(String str) {
-		if(str.length() > 0 && str.length() < 128 ) {
-//			System.out.println(" ==== 정상적 길이 ====");			
-			isValid = true;
-		} else if(str.length() <= 0 ){
-			isValid = false;
-			System.out.println(" 문자열을 입력하세요.");			
-		}
-		else if(str.length() >= 128 ){
-			isValid = false;
-			System.out.println(" 문자열을 128자 이내로 입력하세요.");			
-		}
-	}
-	
-	public boolean isValid() {
-		if(isValid) {
-			System.out.println("isValid true");
-		} else {
-			System.out.println("isValid false ");
-			encodeVal = "Wrong String!!";
-		}
-		
-		return isValid;
-	}
-	
-	public void getEncodeVal() {
-		System.out.println(encodeVal);
+	public void errorV(String str) {
+		System.out.println(str);
+		System.out.println("====== 프로그램을 다시 시작해 주세요. ======");
+		System.exit(0);
 	}
 }
